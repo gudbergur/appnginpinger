@@ -1,5 +1,7 @@
-Appnginpinger - Extremely basic pinger/web monitor meant to run on Google App Engine
+Appnginpinger
 =====
+
+**Extremely basic pinger/web monitor meant to run on Google App Engine**
 
 After www.wasitup.com was taken offline I needed a simple pinger/web monitor to watch my websites and notify me
 if anything goes wrong. I think App Engine is a great no-maintenance platform to run a simple service like this.
