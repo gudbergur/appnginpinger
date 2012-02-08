@@ -22,7 +22,8 @@ SETTINGS = {
     'boxcar_publisher_id': '',
 
     #Set this to a timespan when it's sleepy time and a bit longer downtime
-    #is not as critical, to disable make from and to same value
+    #is not as critical. To disable make from and to same value.
+    #Note that this is UTC time!
     #(0-23 hours, 0-59 minutes, 0-59 seconds)
     'sleeping_from': (0, 0, 0),
     'sleeping_to': (7, 0, 0),
