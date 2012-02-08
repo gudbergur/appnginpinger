@@ -13,7 +13,7 @@ Install
 -----
 
 Just move app.yaml.template to app.yaml and settings.py.template to settings.py and configure to suit you,
-create a app on App Engine then deploy to App Engine via appcfg.py or Google App Engine Launcher.
+create a app on App Engine then deploy via appcfg.py or Google App Engine Launcher.
 
 This shouldn't be more than a 5 minute process.
 
