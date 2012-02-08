@@ -85,7 +85,8 @@ def check_site(url_tuple):
     is_up = site_up(url_tuple[1])
     if is_up:
         if was_down:
-            sendmail("Ok, it's back up :)", url_tuple=url_tuple)
+            if was_down != 1:
+                sendmail("Ok, it's back up :)", url_tuple=url_tuple)
             memcache.delete(down_key)
             return "back up"
         else:
