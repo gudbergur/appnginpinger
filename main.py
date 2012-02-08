@@ -122,10 +122,10 @@ def pause():
 
 def resume():
     if memcache.get("nonotify_key"):
-        return "Already resumed"
-    else:
         memcache.delete("nonotify_key")
         return "OK, notifications are now resumed"
+    else:
+        return "Already resumed"
 
 class PauseHandler(webapp.RequestHandler):
     def get(self):
