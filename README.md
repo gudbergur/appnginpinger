@@ -10,7 +10,7 @@ if anything goes wrong. I think App Engine is a great no-maintenance platform to
 Install
 -----
 
-Just move app.template.yaml to app.yaml and settings.template.py to settings.py and configure to suit you,
+Just move app.yaml.template to app.yaml and settings.py.template to settings.py and configure to suit you,
 then deploy to App Engine via appcfg.py or Google App Engine Launcher.
 
 Note that you must sign up for both user account and provider account with Boxcar (boxcar.io) to use the
