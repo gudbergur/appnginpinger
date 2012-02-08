@@ -4,8 +4,7 @@ Appnginpinger
 **Extremely basic pinger/web monitor meant to run on Google App Engine**
 
 After www.wasitup.com was taken offline I needed a simple pinger/web monitor to watch my websites and notify me
-if anything goes wrong. I think App Engine is a great no-maintenance platform to run a simple service like this.
-
+if anything goes wrong. I think App Engine is a great no-maintenance platform to setup and run a simple service like this.
 
 Install
 -----
@@ -20,31 +19,37 @@ push notification service.
 Procedure
 -----
 
-Again, this project is so simple that if you're going to use it, just read the code.  But the procedure is this:
+Again, this project is so simple that if you're going to use it, just read the code, I try to keep it very simple.
+
+But the procedure is this:
 Cron (via cron.yaml) makes a request every minute to /check, which checks all URLs specified in SETTINGS
 if they're online. If any of them is offline you get notified via email and Boxcar push notifications (iOS).
 
 You can configure sleeping period, for e.g. if your websites are targeted at specific geographic area when
 there's less stress when people are sleeping in which case the URLs must be offline for 10 consecutive
-minutes before you're notified.
+minutes before you're notified (you can disable this behavior).
 
-You can also pause notifications from all or specific hosts via /pause. As you must know the host md5 string
-this is mainly meant for clicking in email notifications.
-
+You can also pause notifications from all hosts via /pause or resume via /resume, this must be used with secret_key. 
 
 Settings
 -----
 
 **Better explained in settings.template.py**
 
-urls_to_check is a tuple with tuples in the form of ("Name of Website", "http://www.example.com") 
+**urls_to_check** is a tuple with tuples in the form of ("Name of Website", "http://www.example.com") 
 
-should_be_online is a tuple with strings of sites that should be online, if all of them are offline we determine our App Engine instance to be offline.
+**should_be_online** is a tuple with strings of sites that should be online, if all of them are offline we determine our App Engine instance to be offline.
 
-email is a string with your email address which must be authorized to send email via App Engine.
+**email** is a string with your email address which must be authorized to send email via App Engine.
 
-boxcar_user and boxcar_publisher_id you get on boxcar.io by signing up for user account and provider account.
+**secret_key** is just used for simple protection on /pause and /resume
 
-sleeping_from and sleeping_to are tuples with timespan when everyone is sleeping and a bit longer downtime is not as critical. I added this cause the websites I manage are mainly meant for a limited geographic area :)
+**pause_duration** indicates how long you want /pause to be
+
+**appengine_url** is the url to your appspot instance
+
+**boxcar_user and boxcar_publisher_id** you get on boxcar.io by signing up for user account and provider account.
+
+**sleeping_from and sleeping_to** are tuples with timespan when everyone is sleeping and a bit longer downtime is not as critical. I added this cause the websites I manage are mainly meant for a limited geographic area :)
 
 

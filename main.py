@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 
 import urllib
-import time
 import logging
 import hashlib
 import datetime
@@ -86,7 +85,7 @@ def check_site(url_tuple):
     if is_up:
         if was_down:
             if was_down != 1:
-                sendmail("Ok, it's back up :)", url_tuple=url_tuple)
+                sendmail("Back up :)", url_tuple=url_tuple)
             memcache.delete(down_key)
             return "back up"
         else:
