@@ -15,8 +15,8 @@ from google.appengine.api import memcache
 from settings import SETTINGS
 
 def boxcar(message, title=None, url_tuple=None):
-    urlname_md5 = (hashlib.md5(url_tuple[0]).hexdigest(),)
-    if memcache.get(nonotify_key(urlname_md5)) or memcache.get(nonotify_key()):
+    if memcache.get("nonotify_key"):
+        logging.info("Skipped boxcar because of pause: %s - %s" % (title, message))
         return False
 
     if not title:
@@ -36,8 +36,8 @@ def boxcar(message, title=None, url_tuple=None):
     return result.status_code == 200
 
 def sendmail(message, title=None, url_tuple=None):
-    urlname_md5 = (hashlib.md5(url_tuple[0]).hexdigest(),)
-    if memcache.get(nonotify_key(urlname_md5)) or memcache.get(nonotify_key()):
+    if memcache.get("nonotify_key"):
+        logging.info("Skipped sendmail because of pause: %s - %s" % (title, message))
         return False
 
     if not title:
@@ -45,15 +45,9 @@ def sendmail(message, title=None, url_tuple=None):
 
     message += """\n
 http://%s/pause
-http://%s/pause?urlname_md5=%s
-http://%s/resume
-http://%s/resume?urlname_md5=%s""" % (
+http://%s/resume""" % (
         SETTINGS['appengine_url'],
         SETTINGS['appengine_url'],
-        nonotify_key,
-        SETTINGS['appengine_url'],
-        SETTINGS['appengine_url'],
-        nonotify_key)
     sent = mail.send_mail(sender=SETTINGS['email'],
                   to=SETTINGS['email'],
                   subject=title,
@@ -123,24 +117,27 @@ def check_all():
     logging.info(output)
     return output
 
-def nonotify_key(urlname_md5=None):
-    return "nonotify_%s" % (urlname_md5,) if urlname_md5 else "nonotify"
+def pause():
+    if memcache.get("nonotify_key"):
+        return "Already paused"
+    else:
+        memcache.add(key="nonotify_key", value=True, time=SETTINGS['pause_duration'])
+        return "OK, notifications are now paused for %i seconds." % (SETTINGS['pause_duration'],)
 
-def pause(urlname_md5=None):
-    memcache.add(key=nonotify_key(urlname_md5), value=True, time=SETTINGS['pause_duration'])
-    return "OK"
-
-def resume(urlname_md5=None):
-    memcache.delete(nonotify_key(urlname_md5))
-    return "OK"
+def resume():
+    if memcache.get("nonotify_key"):
+        return "Already resumed"
+    else:
+        memcache.delete("nonotify_key")
+        return "OK, notifications are now resumed"
 
 class PauseHandler(webapp.RequestHandler):
     def get(self):
-        self.response.out.write(pause(self.request.get("urlname_md5", None)))
+        self.response.out.write(pause())
 
 class ResumeHandler(webapp.RequestHandler):
     def get(self):
-        self.response.out.write(resume(self.request.get("urlname_md5", None)))
+        self.response.out.write(resume())
 
 class CheckHandler(webapp.RequestHandler):
     def get(self):
