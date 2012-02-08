@@ -75,8 +75,8 @@ def is_connected():
     return False
 
 def is_sleeping():
-    now_tuple = tuple(getattr(datetime.datetime.now(), x) for x in ['hour', 'minute', 'second'])
-    return SETTINGS['sleeping_from'] < now_tuple and now_tuple < SETTINGS['sleeping_to']
+    now_tuple = tuple(getattr(datetime.datetime.utcnow(), x) for x in ['hour', 'minute', 'second'])
+    return SETTINGS['sleeping_from'] < now_tuple < SETTINGS['sleeping_to']
 
 def check_site(url_tuple):
     down_key = "down_%s" % (hashlib.md5(url_tuple[0]).hexdigest(),)
