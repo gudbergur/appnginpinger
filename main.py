@@ -94,18 +94,12 @@ def check_site(url_tuple):
             if is_sleeping():
                 notification_list = filter(lambda x: x >= 10, notification_list)
             if was_down in notification_list:
-                notify("STILL DOWN!", url_tuple=url_tuple)
+                notify("WEBSITE DOWN!", url_tuple=url_tuple)
             memcache.incr(down_key)
             return "still down"
         else:
-            time.sleep(10)
-            if is_connected() and not site_up(url_tuple[1]):
-                if not is_sleeping():
-                    notify("JUST WENT DOWN!", url_tuple=url_tuple)
-                memcache.add(key=down_key, value=1, time=86400)
-                return "went down"
-            else:
-                return "is up, responded to 2nd request"
+            memcache.add(key=down_key, value=1, time=86400)
+            return "went down we think"
 
 def check_all():
     output = ""
