@@ -1,0 +1,5 @@
+cron:
+- description: site checking
+  url: /check
+  schedule: every 1 minutes
+
