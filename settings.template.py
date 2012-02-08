@@ -11,6 +11,9 @@ SETTINGS = {
     #URL to your appengine instance, used for linking in emails
     'appengine_url': 'example.appspot.com',
 
+    #Just some random secret string to make sure nobody else can pause/resume notifications
+    'secret_key': 'abcd',
+
     #Pause duration when pausing notifications
     'pause_duration': 3600,
 

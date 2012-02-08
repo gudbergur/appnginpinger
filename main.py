@@ -44,10 +44,12 @@ def sendmail(message, title=None, url_tuple=None):
         title = "%s : %s" % (url_tuple[0], message)
 
     message += """\n
-http://%s/pause
-http://%s/resume""" % (
+http://%s/pause?s=%s
+http://%s/resume?s=%s""" % (
         SETTINGS['appengine_url'],
+        SETTINGS['secret_key'],
         SETTINGS['appengine_url'],
+        SETTINGS['secret_key'])
     sent = mail.send_mail(sender=SETTINGS['email'],
                   to=SETTINGS['email'],
                   subject=title,
@@ -127,10 +129,14 @@ def resume():
 
 class PauseHandler(webapp.RequestHandler):
     def get(self):
+        if self.request.get("s", None) != SETTINGS['secret_key']:
+            return
         self.response.out.write(pause())
 
 class ResumeHandler(webapp.RequestHandler):
     def get(self):
+        if self.request.get("s", None) != SETTINGS['secret_key']:
+            return
         self.response.out.write(resume())
 
 class CheckHandler(webapp.RequestHandler):
